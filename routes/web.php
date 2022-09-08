@@ -14,5 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('home');
+    return redirect('/home');
 });
+
+Route::get('/home', [App\Http\Controllers\ListDispController::class, 'index']);
