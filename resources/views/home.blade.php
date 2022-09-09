@@ -16,18 +16,54 @@
             <div class="container-fluid">
                 <div class="h1 text-center text-light text-shadow-lg mb-5">Employees list</div>
                 @isset($allEmp, $allDeparts, $allSalaries, $allTitles)
+                <div class="h3 text-center text-light text-shadow-lg mb-5">Filter by:</div>
+                <div class="row d-flex justify-content-center mb-4">
+                    <a class="text-center" href="/home/1/0/0"><button class="btn btn-primary w-25 m-2">Filter by gender: M</button></a>
+                    <a class="text-center" href="/home/2/0/0"><button class="btn btn-primary w-25 m-2">Filter by gender: F</button></a>
+                    <form class="d-flex justify-content-center mb-2" action="/home/3/" method="get"> Filter department: <select name="depoption" class="btn btn-primary w-25 m-2">
+                        <option value="">choose option</option>
+                        @foreach($allDeparts as $department)
+                            <option value="{{$department->dept_name}}">{{$department->dept_name}}</option>
+                        @endforeach
+                    </select>
+                    <select class="btn btn-primary w-25 m-2" name="empoption">
+                        <option value="fired">Employees fired</option>
+                        <option value="employed">Employees employed</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary w-25">Filter</button>
+                    </form>
+                    <div class="row m-auto"> 
+                        <form class="d-flex justify-content-center" action="" method="GET">
+                        Range of salary: 
+                        <input class="form-control w-25 m-1" type="text" name="from" value=""> 
+                        - <input class="form-control w-25 m-1" type="text" name="to" value="">
+                        <button type="submit" class="btn btn-primary w-25">Filter</button>
+                        </form>
+                    </div>
+                </div>
                 <ol class="list-group list-group-numbered w-50 m-auto border border-dark border-1">
                     @foreach($allEmp as $emp)
                     <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-start">
                         <div class="ms-2 me-auto">
-                        <div class="fw-bold">Name and surname: {{$emp->first_name}} {{$emp->last_name}}</div>
-                        Department:<br/>
-                        Job title:<br/>
-                        Salary:
+                        <div class="fw-bold">{{$emp->first_name}} {{$emp->last_name}}</div>
+                        @foreach($allDeparts as $department)
+                            @foreach($allIds as $id)
+                                @if($emp->emp_no == $id->emp_no && $department->dept_no == $id->dept_no && $id->to_date > $now && $id->from_date < $now)
+                                    Department: {{$department->dept_name}}<br/>
+                                @endif
+                            @endforeach
+                        @endforeach
+                        @foreach($allTitles as $title)
+                            @if($emp->emp_no == $title->emp_no && $title->to_date > $now && $title->from_date < $now)Job title: {{$title->title}} <br/>@endif
+                        @endforeach
+                        @foreach($allSalaries as $salary)
+                            @if($emp->emp_no == $salary->emp_no && $salary->to_date > $now && $salary->from_date < $now)Salary: {{$salary->salary}} zł@endif
+                        @endforeach
                         </div>
                     </li>
                     @endforeach
                 </ol>
+                <div class="m-auto w-25 mt-5"><button class="btn btn-secondary">Export list</button></div>
                 @endisset
                 @empty($allEmp && $allDeparts && $allSalaries && $allTitles)
                     <div class="h3 text-center text-white">No data to display.</div>

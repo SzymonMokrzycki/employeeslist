@@ -18,3 +18,4 @@ Route::get('/', function () {
 });
 
 Route::get('/home', [App\Http\Controllers\ListDispController::class, 'index']);
+Route::get('/home/{filter}/{depoption}/{empoption}', [App\Http\Controllers\ListDispController::class, 'filter']);
