@@ -18,26 +18,37 @@
                 @isset($allEmp, $allDeparts, $allSalaries, $allTitles)
                 <div class="h3 text-center text-light text-shadow-lg mb-5">Filter by:</div>
                 <div class="row d-flex justify-content-center mb-4">
-                    <a class="text-center" href="/home/1/0/0"><button class="btn btn-primary w-25 m-2">Filter by gender: M</button></a>
-                    <a class="text-center" href="/home/2/0/0"><button class="btn btn-primary w-25 m-2">Filter by gender: F</button></a>
-                    <form class="d-flex justify-content-center mb-2" action="/home/3/" method="get"> Filter department: <select name="depoption" class="btn btn-primary w-25 m-2">
-                        <option value="">choose option</option>
-                        @foreach($allDeparts as $department)
-                            <option value="{{$department->dept_name}}">{{$department->dept_name}}</option>
-                        @endforeach
-                    </select>
-                    <select class="btn btn-primary w-25 m-2" name="empoption">
-                        <option value="fired">Employees fired</option>
-                        <option value="employed">Employees employed</option>
-                    </select>
-                    <button type="submit" class="btn btn-primary w-25">Filter</button>
+                    <a class="text-center" href="/home/1"><button class="btn btn-primary w-25 m-2">Filter by gender: M</button></a>
+                    <a class="text-center" href="/home/2"><button class="btn btn-primary w-25 m-2">Filter by gender: F</button></a>
+                    <form class="d-flex justify-content-center mb-2" action="/filterdep" method="get"> Filter department: 
+                        <select name="depoption" class="btn btn-primary w-25 m-2">
+                            <option value="">choose option</option>
+                            @empty($dep)
+                                @foreach($allDeparts as $department)
+                                    <option value="{{$department->dept_name}}">{{$department->dept_name}}</option>
+                                @endforeach
+                            @endempty
+                            @isset($dep)
+                                @foreach($dep as $department)
+                                    <option value="{{$department->dept_name}}">{{$department->dept_name}}</option>
+                                @endforeach
+                            @endisset
+                        </select>
+                        <button type="submit" class="btn btn-primary w-25">Filter</button>
+                    </form>
+                    <form class="d-flex justify-content-center mb-2" action="/filteremp" method="get"> Filter employees:
+                        <select class="btn btn-primary w-25 m-2" name="empoption">
+                            <option value="fired">Employees fired</option>
+                            <option value="employed">Employees employed</option>
+                        </select>
+                        <button type="submit" class="btn btn-primary w-25">Filter</button>
                     </form>
                     <div class="row m-auto"> 
-                        <form class="d-flex justify-content-center" action="" method="GET">
-                        Range of salary: 
-                        <input class="form-control w-25 m-1" type="text" name="from" value=""> 
-                        - <input class="form-control w-25 m-1" type="text" name="to" value="">
-                        <button type="submit" class="btn btn-primary w-25">Filter</button>
+                        <form class="d-flex justify-content-center" action="/filterrange" method="GET">
+                            Range of salary: 
+                            <input class="form-control w-25 m-1" type="text" name="from" value=""> 
+                            - <input class="form-control w-25 m-1" type="text" name="to" value="">
+                            <button type="submit" class="btn btn-primary w-25">Filter</button>
                         </form>
                     </div>
                 </div>
@@ -53,6 +64,9 @@
                                 @endif
                             @endforeach
                         @endforeach
+                        @isset($depoption)
+                            Department: {{$depoption}}<br/>
+                        @endisset
                         @foreach($allTitles as $title)
                             @if($emp->emp_no == $title->emp_no && $title->to_date > $now && $title->from_date < $now)Job title: {{$title->title}} <br/>@endif
                         @endforeach
@@ -63,7 +77,7 @@
                     </li>
                     @endforeach
                 </ol>
-                <div class="m-auto w-25 mt-5"><button class="btn btn-secondary">Export list</button></div>
+                <div class="m-auto w-25 mt-5"><a href="/export"><button class="btn btn-secondary">Export list</button></a></div>
                 @endisset
                 @empty($allEmp && $allDeparts && $allSalaries && $allTitles)
                     <div class="h3 text-center text-white">No data to display.</div>

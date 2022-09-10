@@ -18,4 +18,8 @@ Route::get('/', function () {
 });
 
 Route::get('/home', [App\Http\Controllers\ListDispController::class, 'index']);
-Route::get('/home/{filter}/{depoption}/{empoption}', [App\Http\Controllers\ListDispController::class, 'filter']);
+Route::get('/home/{filter}', [App\Http\Controllers\ListDispController::class, 'filter']);
+Route::get('/filteremp', [App\Http\Controllers\ListDispController::class, 'filterOptionEmployees']);
+Route::get('/filterdep', [App\Http\Controllers\ListDispController::class, 'filterOptionDepartment']);
+Route::get('/filterrange', [App\Http\Controllers\ListDispController::class, 'rangeSalary']);
+Route::get('/export', [App\Http\Controllers\ListDispController::class, 'export']);
